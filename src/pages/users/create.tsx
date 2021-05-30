@@ -1,7 +1,9 @@
 import { Box, Flex, Heading, Divider, SimpleGrid, VStack, HStack, Button } from '@chakra-ui/react';
 import { SubmitHandler ,useForm } from 'react-hook-form';
+
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+
 import Link from 'next/link';
 
 import { Input } from "../../components/Form/Input";
@@ -22,7 +24,7 @@ type CreateUserFormData = {
     password_confirmation: yup.string().oneOf([
         null, yup.ref('password')
     ], 'As senhas precisam ser iguais')
-  })
+  });
 
 export default function CreateUser() {
     const { register, handleSubmit, formState } = useForm({
@@ -45,6 +47,7 @@ export default function CreateUser() {
                 <Sidebar />
 
                 <Box
+                    as="form"
                     flex="1"
                     borderRadius={8}
                     bg="gray.800"
@@ -91,7 +94,7 @@ export default function CreateUser() {
 
                     <Flex mt="8" justify="flex-end">
                         <HStack spacing="4">
-                          <Link href="/users" passHref>
+                        <Link href="/users" passHref>
                             <Button as="a" colorScheme="whiteAlpha">Cancelar</Button>
                           </Link>
                             <Button

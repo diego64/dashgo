@@ -7,7 +7,6 @@ interface ActiveLinkProps extends LinkProps {
     shouldMatchExactHref?: boolean;
 }
 
-
 export function ActiveLink({
     children,
     shouldMatchExactHref = false,

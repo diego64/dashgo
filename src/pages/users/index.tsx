@@ -1,12 +1,17 @@
+import Link from 'next/link';
 import { Box, Text, Button, Flex, Heading, Icon, Table, Thead ,Tr, Th, Td, Checkbox, Tbody, useBreakpointValue } from '@chakra-ui/react';
 import { RiAddLine } from "react-icons/ri";
-import Link from 'next/link'
+import { useQuery } from 'react-query';
 
 import { Header } from "../../components/Header";
 import { Pagination } from '../../components/Pagination';
 import { Sidebar } from "../../components/Sidebar";
+import { Spinner } from '@chakra-ui/react';
+import { useUsers } from '../../services/hooks/useUsers';
 
 export default function UserList() {
+    const { data, isLoading, isFetching, error } = useUsers()
+
     const isWideVersion = useBreakpointValue({
         base: false,
         lg: true
@@ -20,7 +25,11 @@ export default function UserList() {
 
                 <Box width="100%" flex="1" borderRadius={8} bg="gray.800" p="8">
                     <Flex mb="8" justify="space-between" align="center">
-                        <Heading size="lg" fontWeight="normal">Usuários</Heading>
+                        <Heading size="lg" fontWeight="normal">
+                            Usuários
+
+                            { !isLoading && isFetching && <Spinner size="sm" color="gray.500" ml="4" />}
+                        </Heading>
                     
                         <Link href="/users/create" passHref>
                             <Button 
@@ -35,7 +44,17 @@ export default function UserList() {
                         </Link>
                     </Flex>
 
-                    <Table colorScheme="whiteAlpha">
+                    { isLoading ? (
+                        <Flex justify="center">
+                            <Spinner />
+                        </Flex>
+                    )  : error ? (
+                        <Flex justify="center">
+                            <Text>Falha ao obter dados dos usuários</Text>
+                        </Flex>
+                    ) : (
+                        <>
+                        <Table colorScheme="whiteAlpha">
                         <Thead>
                             <Tr>
                                 <Th px={["4", "4", "6"]} color="gray.300" width="8">
@@ -47,47 +66,27 @@ export default function UserList() {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            <Tr>
-                                <Td px={["4", "4", "6"]}>
-                                    <Checkbox colorScheme="pink"/>
-                                </Td>
-                                <Td>
-                                    <Box>
-                                        <Text fontWeight="bold">Diego Ferreira</Text>
-                                        <Text fontSize="sm" color="gray.300">diegoferreira1964@gmail.com</Text>
-                                    </Box>
-                                </Td>
-                                { isWideVersion && <Td>28 de Maio, 2021</Td>}
+                            {data.map(user => {
+                                return (
+                                    <Tr key={user.id}>
+                                      <Td px={["4", "4", "6"]}>
+                                       <Checkbox colorScheme="pink"/>
+                                      </Td>
+                                      <Td>
+                                        <Box>
+                                            <Text fontWeight="bold">{user.name}</Text>
+                                            <Text fontSize="sm" color="gray.300">{user.email}</Text>
+                                        </Box>
+                                      </Td>
+                                { isWideVersion && <Td>{user.createdAt}</Td>}
                             </Tr>
-
-                            <Tr>
-                                <Td px={["4", "4", "6"]}>
-                                    <Checkbox colorScheme="pink"/>
-                                </Td>
-                                <Td>
-                                    <Box>
-                                        <Text fontWeight="bold">Administrador</Text>
-                                        <Text fontSize="sm" color="gray.300">admin@gmail.com</Text>
-                                    </Box>
-                                </Td>
-                                { isWideVersion && <Td>28 de Maio, 2021</Td>}
-                            </Tr>
-
-                            <Tr>
-                                <Td px={["4", "4", "6"]}>
-                                    <Checkbox colorScheme="pink"/>
-                                </Td>
-                                <Td>
-                                    <Box>
-                                        <Text fontWeight="bold">Usuário Teste</Text>
-                                        <Text fontSize="sm" color="gray.300">teste@gmail.com</Text>
-                                    </Box>
-                                </Td>
-                                { isWideVersion && <Td>28 de Maio, 2021</Td>}
-                            </Tr>
+                                )
+                            })}
                         </Tbody>
                     </Table>
                     <Pagination />
+                    </>
+                    )}
                 </Box>
             </Flex>
         </Box>

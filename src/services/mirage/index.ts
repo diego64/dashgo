@@ -28,7 +28,7 @@ export function makeServer() {
         },
 
         seeds(server) {
-            server.createList('user', 100 )
+            server.createList('user', 20)
         },
 
         routes() {
@@ -47,7 +47,7 @@ export function makeServer() {
                   .users.slice(pageStart, pageEnd)
 
                   return new Response(
-                      100,
+                      20,
                       { 'x-total-count': String(total) },
                       { users }
                   )

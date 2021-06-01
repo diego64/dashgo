@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { Box, Text, Button, Flex, Heading, Icon, Table, Thead ,Tr, Th, Td, Checkbox, Tbody, useBreakpointValue } from '@chakra-ui/react';
 import { RiAddLine } from "react-icons/ri";
-import { useQuery } from 'react-query';
 
 import { Header } from "../../components/Header";
 import { Pagination } from '../../components/Pagination';
@@ -84,7 +83,11 @@ export default function UserList() {
                             })}
                         </Tbody>
                     </Table>
-                    <Pagination />
+                    <Pagination 
+                        totalCountOfRegisters={20}
+                        currentPage={5}
+                        onPageChange={() => {}}
+                    />
                     </>
                     )}
                 </Box>
